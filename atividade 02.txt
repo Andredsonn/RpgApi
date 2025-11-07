@@ -1,7 +1,9 @@
 LInk do Git
 
-https://github.com/Lschanhi/Aula04RpgApi
+https://github.com/Andredsonn/RpgApi.git
 
-link SOMEE
+link Azure
 
-http://rpgapiexercicio.somee.com/RpgApi/personagensexercicio
+mbae.azurewebsites.net
+
+
