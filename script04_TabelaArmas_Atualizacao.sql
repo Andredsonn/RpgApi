@@ -1,5 +1,132 @@
-﻿BEGIN TRANSACTION;
-ALTER TABLE [TB_PERSONAGENS] ADD [Derrotas] int NOT NULL DEFAULT 0;
+﻿IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+GO
+
+BEGIN TRANSACTION;
+CREATE TABLE [TB_PERSONAGENS] (
+    [Id] int NOT NULL IDENTITY,
+    [Nome] varchar(200) NOT NULL,
+    [PontosVida] int NOT NULL,
+    [Forca] int NOT NULL,
+    [Defesa] int NOT NULL,
+    [Inteligencia] int NOT NULL,
+    [Classe] int NOT NULL,
+    CONSTRAINT [PK_TB_PERSONAGENS] PRIMARY KEY ([Id])
+);
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Classe', N'Defesa', N'Forca', N'Inteligencia', N'Nome', N'PontosVida') AND [object_id] = OBJECT_ID(N'[TB_PERSONAGENS]'))
+    SET IDENTITY_INSERT [TB_PERSONAGENS] ON;
+INSERT INTO [TB_PERSONAGENS] ([Id], [Classe], [Defesa], [Forca], [Inteligencia], [Nome], [PontosVida])
+VALUES (1, 1, 23, 17, 33, 'Frodo', 100),
+(2, 1, 25, 15, 30, 'Sam', 100),
+(3, 3, 21, 18, 35, 'Galadriel', 110),
+(4, 2, 18, 18, 37, 'Gandalf', 105),
+(5, 1, 17, 20, 31, 'Hobbit', 100),
+(6, 3, 13, 21, 34, 'Celeborn', 150),
+(7, 2, 11, 25, 35, 'Radagast', 200);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Classe', N'Defesa', N'Forca', N'Inteligencia', N'Nome', N'PontosVida') AND [object_id] = OBJECT_ID(N'[TB_PERSONAGENS]'))
+    SET IDENTITY_INSERT [TB_PERSONAGENS] OFF;
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20250911004914_InitialCreate', N'9.0.10');
+
+CREATE TABLE [TB_ARMAS] (
+    [id] int NOT NULL IDENTITY,
+    [nome] varchar(200) NOT NULL,
+    [dano] int NOT NULL,
+    CONSTRAINT [PK_TB_ARMAS] PRIMARY KEY ([id])
+);
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'id', N'dano', N'nome') AND [object_id] = OBJECT_ID(N'[TB_ARMAS]'))
+    SET IDENTITY_INSERT [TB_ARMAS] ON;
+INSERT INTO [TB_ARMAS] ([id], [dano], [nome])
+VALUES (1, 10, 'Anduril'),
+(2, 50, 'Sting'),
+(3, 150, 'Glamdring'),
+(4, 200, 'Orcrist'),
+(5, 80, 'Grond'),
+(6, 99, 'Axe of Gimli'),
+(7, 60, 'Espada Dos Nazgul');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'id', N'dano', N'nome') AND [object_id] = OBJECT_ID(N'[TB_ARMAS]'))
+    SET IDENTITY_INSERT [TB_ARMAS] OFF;
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20250924004721_MigracaoArma', N'9.0.10');
+
+ALTER TABLE [TB_PERSONAGENS] ADD [FotoPersonagem] varbinary(max) NULL;
+
+ALTER TABLE [TB_PERSONAGENS] ADD [UsuarioId] int NULL;
+
+CREATE TABLE [TB_USUARIOS] (
+    [Id] int NOT NULL IDENTITY,
+    [Username] varchar(200) NOT NULL,
+    [PasswordHash] varbinary(max) NULL,
+    [PasswordSalt] varbinary(max) NULL,
+    [Foto] varbinary(max) NULL,
+    [Latitude] float NULL,
+    [Longitude] float NULL,
+    [DataAcesso] datetime2 NULL,
+    [Perfil] varchar(200) NULL,
+    [Email] varchar(200) NULL,
+    CONSTRAINT [PK_TB_USUARIOS] PRIMARY KEY ([Id])
+);
+
+UPDATE [TB_PERSONAGENS] SET [FotoPersonagem] = NULL, [UsuarioId] = 1
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+
+
+UPDATE [TB_PERSONAGENS] SET [FotoPersonagem] = NULL, [UsuarioId] = 1
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+
+
+UPDATE [TB_PERSONAGENS] SET [FotoPersonagem] = NULL, [UsuarioId] = 1
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+
+
+UPDATE [TB_PERSONAGENS] SET [FotoPersonagem] = NULL, [UsuarioId] = 1
+WHERE [Id] = 4;
+SELECT @@ROWCOUNT;
+
+
+UPDATE [TB_PERSONAGENS] SET [FotoPersonagem] = NULL, [UsuarioId] = 1
+WHERE [Id] = 5;
+SELECT @@ROWCOUNT;
+
+
+UPDATE [TB_PERSONAGENS] SET [FotoPersonagem] = NULL, [UsuarioId] = 1
+WHERE [Id] = 6;
+SELECT @@ROWCOUNT;
+
+
+UPDATE [TB_PERSONAGENS] SET [FotoPersonagem] = NULL, [UsuarioId] = 1
+WHERE [Id] = 7;
+SELECT @@ROWCOUNT;
+
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'DataAcesso', N'Email', N'Foto', N'Latitude', N'Longitude', N'PasswordHash', N'PasswordSalt', N'Perfil', N'Username') AND [object_id] = OBJECT_ID(N'[TB_USUARIOS]'))
+    SET IDENTITY_INSERT [TB_USUARIOS] ON;
+INSERT INTO [TB_USUARIOS] ([Id], [DataAcesso], [Email], [Foto], [Latitude], [Longitude], [PasswordHash], [PasswordSalt], [Perfil], [Username])
+VALUES (1, NULL, 'seuEmail@gmail.com', NULL, -23.520024100000001E0, -46.596497999999997E0, 0xE89681C0D59FFC4496634DF13372D31356E6F827AFC8EDC06650E5049A5D703F8E5D92D3DF559D8B18D03643129FDE22F2AB7FB55A608712CDB7998F4E1B706D, 0xA170C8DDC82DEE87E8374943008EB70EB2E81D09B63DA51FB0570E72292AA31BCC48E50717CE0D3193F3D12EEC025CEB2F2AA581CCA2A71F6DA8C57449049861F0F5E3AF97382CCB66C71890C2F0D183FEFC864C44CD25F6FD9BEC28D60A170504900E1249B19AF3712AF9BB476C3BC6F2BE87EA2BC0DE7091748DAFDD965282, 'Admin', 'UsuarioAdmin');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'DataAcesso', N'Email', N'Foto', N'Latitude', N'Longitude', N'PasswordHash', N'PasswordSalt', N'Perfil', N'Username') AND [object_id] = OBJECT_ID(N'[TB_USUARIOS]'))
+    SET IDENTITY_INSERT [TB_USUARIOS] OFF;
+
+CREATE INDEX [IX_TB_PERSONAGENS_UsuarioId] ON [TB_PERSONAGENS] ([UsuarioId]);
+
+ALTER TABLE [TB_PERSONAGENS] ADD CONSTRAINT [FK_TB_PERSONAGENS_TB_USUARIOS_UsuarioId] FOREIGN KEY ([UsuarioId]) REFERENCES [TB_USUARIOS] ([Id]);
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251001012654_MigracaoUsuario', N'9.0.10');
+
+ALTER TABLE [TB_PERSONAGENS] ADD [Derotas] int NOT NULL DEFAULT 0;
 
 ALTER TABLE [TB_PERSONAGENS] ADD [Disputas] int NOT NULL DEFAULT 0;
 
@@ -42,37 +169,37 @@ WHERE [id] = 7;
 SELECT @@ROWCOUNT;
 
 
-UPDATE [TB_PERSONAGENS] SET [Derrotas] = 0, [Disputas] = 0, [Vitorias] = 0
+UPDATE [TB_PERSONAGENS] SET [Derotas] = 0, [Disputas] = 0, [Vitorias] = 0
 WHERE [Id] = 1;
 SELECT @@ROWCOUNT;
 
 
-UPDATE [TB_PERSONAGENS] SET [Derrotas] = 0, [Disputas] = 0, [Vitorias] = 0
+UPDATE [TB_PERSONAGENS] SET [Derotas] = 0, [Disputas] = 0, [Vitorias] = 0
 WHERE [Id] = 2;
 SELECT @@ROWCOUNT;
 
 
-UPDATE [TB_PERSONAGENS] SET [Derrotas] = 0, [Disputas] = 0, [Vitorias] = 0
+UPDATE [TB_PERSONAGENS] SET [Derotas] = 0, [Disputas] = 0, [Vitorias] = 0
 WHERE [Id] = 3;
 SELECT @@ROWCOUNT;
 
 
-UPDATE [TB_PERSONAGENS] SET [Derrotas] = 0, [Disputas] = 0, [Vitorias] = 0
+UPDATE [TB_PERSONAGENS] SET [Derotas] = 0, [Disputas] = 0, [Vitorias] = 0
 WHERE [Id] = 4;
 SELECT @@ROWCOUNT;
 
 
-UPDATE [TB_PERSONAGENS] SET [Derrotas] = 0, [Disputas] = 0, [Vitorias] = 0
+UPDATE [TB_PERSONAGENS] SET [Derotas] = 0, [Disputas] = 0, [Vitorias] = 0
 WHERE [Id] = 5;
 SELECT @@ROWCOUNT;
 
 
-UPDATE [TB_PERSONAGENS] SET [Derrotas] = 0, [Disputas] = 0, [Vitorias] = 0
+UPDATE [TB_PERSONAGENS] SET [Derotas] = 0, [Disputas] = 0, [Vitorias] = 0
 WHERE [Id] = 6;
 SELECT @@ROWCOUNT;
 
 
-UPDATE [TB_PERSONAGENS] SET [Derrotas] = 0, [Disputas] = 0, [Vitorias] = 0
+UPDATE [TB_PERSONAGENS] SET [Derotas] = 0, [Disputas] = 0, [Vitorias] = 0
 WHERE [Id] = 7;
 SELECT @@ROWCOUNT;
 
@@ -87,7 +214,83 @@ CREATE UNIQUE INDEX [IX_TB_ARMAS_PersonagemId] ON [TB_ARMAS] ([PersonagemId]);
 ALTER TABLE [TB_ARMAS] ADD CONSTRAINT [FK_TB_ARMAS_TB_PERSONAGENS_PersonagemId] FOREIGN KEY ([PersonagemId]) REFERENCES [TB_PERSONAGENS] ([Id]) ON DELETE CASCADE;
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20251001223426_MigracaoUmParaUm', N'9.0.9');
+VALUES (N'20251001223426_MigracaoUmParaUm', N'9.0.10');
+
+CREATE TABLE [TB_HABILIDADES] (
+    [Id] int NOT NULL IDENTITY,
+    [Nome] varchar(200) NOT NULL,
+    [Dano] int NOT NULL,
+    CONSTRAINT [PK_TB_HABILIDADES] PRIMARY KEY ([Id])
+);
+
+CREATE TABLE [TB_PERSONAGENS_HABILIDADES] (
+    [PersonagemId] int NOT NULL,
+    [HabilidadeId] int NOT NULL,
+    CONSTRAINT [PK_TB_PERSONAGENS_HABILIDADES] PRIMARY KEY ([PersonagemId], [HabilidadeId]),
+    CONSTRAINT [FK_TB_PERSONAGENS_HABILIDADES_TB_HABILIDADES_HabilidadeId] FOREIGN KEY ([HabilidadeId]) REFERENCES [TB_HABILIDADES] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_TB_PERSONAGENS_HABILIDADES_TB_PERSONAGENS_PersonagemId] FOREIGN KEY ([PersonagemId]) REFERENCES [TB_PERSONAGENS] ([Id]) ON DELETE CASCADE
+);
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Dano', N'Nome') AND [object_id] = OBJECT_ID(N'[TB_HABILIDADES]'))
+    SET IDENTITY_INSERT [TB_HABILIDADES] ON;
+INSERT INTO [TB_HABILIDADES] ([Id], [Dano], [Nome])
+VALUES (1, 39, 'Adormecer'),
+(2, 41, 'Congelar'),
+(3, 37, 'Hipnotizar');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Dano', N'Nome') AND [object_id] = OBJECT_ID(N'[TB_HABILIDADES]'))
+    SET IDENTITY_INSERT [TB_HABILIDADES] OFF;
+
+UPDATE [TB_USUARIOS] SET [PasswordHash] = 0xD6CF38AFD40D0D81C6D013CC8E0D15F94482FD13AF1FB9B6B6A727F6D6048BE2EE52C081BEB032C86D8ADEDDC38093A244347E07946772903C7987DC27E6AABF, [PasswordSalt] = 0x633515192E37116D379BB8F68E2FCA443CD4AA35514691BB2E475E3C7AA2F71CC97097249E0E2571055A40AA8F8DCC1C966360A7B6891F25B62E0E4095F95CE7D387053E99DF042A0839F0BFB79BCDCD9A6AA039F58144D4C3C97167872ACA3736FCADF83B4AD7576FDB405D2647F0261CD10D3385C349B98540B1699E907278
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'HabilidadeId', N'PersonagemId') AND [object_id] = OBJECT_ID(N'[TB_PERSONAGENS_HABILIDADES]'))
+    SET IDENTITY_INSERT [TB_PERSONAGENS_HABILIDADES] ON;
+INSERT INTO [TB_PERSONAGENS_HABILIDADES] ([HabilidadeId], [PersonagemId])
+VALUES (1, 1),
+(2, 1),
+(2, 2),
+(2, 3),
+(3, 3),
+(3, 4),
+(1, 5),
+(2, 6),
+(3, 7);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'HabilidadeId', N'PersonagemId') AND [object_id] = OBJECT_ID(N'[TB_PERSONAGENS_HABILIDADES]'))
+    SET IDENTITY_INSERT [TB_PERSONAGENS_HABILIDADES] OFF;
+
+CREATE INDEX [IX_TB_PERSONAGENS_HABILIDADES_HabilidadeId] ON [TB_PERSONAGENS_HABILIDADES] ([HabilidadeId]);
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251001232953_MigracaoMuitosParaMuitos', N'9.0.10');
+
+EXEC sp_rename N'[TB_PERSONAGENS].[Derotas]', N'Derrotas', 'COLUMN';
+
+DECLARE @var sysname;
+SELECT @var = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[TB_USUARIOS]') AND [c].[name] = N'Perfil');
+IF @var IS NOT NULL EXEC(N'ALTER TABLE [TB_USUARIOS] DROP CONSTRAINT [' + @var + '];');
+ALTER TABLE [TB_USUARIOS] ADD DEFAULT 'Jogador' FOR [Perfil];
+
+CREATE TABLE [TB_DISPUTAS] (
+    [Id] int NOT NULL IDENTITY,
+    [Dt_Disputa] datetime2 NULL,
+    [AtacanteId] int NOT NULL,
+    [OponenteId] int NOT NULL,
+    [Tx_Narracao] varchar(200) NOT NULL,
+    CONSTRAINT [PK_TB_DISPUTAS] PRIMARY KEY ([Id])
+);
+
+UPDATE [TB_USUARIOS] SET [PasswordHash] = 0x4AD6365E93F89AE326FAE99F383AF42D0AFB3647EEED8DD72E61578F80D5260C2A7CF4A28075A0D3235A2F454C0843A9101E08D4BDCCF60F5BAC8C6331C43DC8, [PasswordSalt] = 0xF5DBDDC76E8084E87835514B4631D0D79D6E445E3ED95C918B1D74F3428892298434BAE076F18727F8C60726ED07313F7DE99FB65F45404EF2237E5763970FEB725F205512D642FAF051D1FCF974153261861746E9A79CFE57944A2525A8F2E54348CE250831B118204FE50DB46667F8773D79EF1D535F5A6225895CA58BDC8B
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251105015242_AtualizacaoErros', N'9.0.10');
 
 COMMIT;
 GO
